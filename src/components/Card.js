@@ -2,9 +2,9 @@ import React from "react";
 function Card (props) {
 
   function handleClick() {
-    props.setSelectedCard(props.onCardClick);
+    props.setSelectedCard(props.card);
     props.onCardClick(props.card);
-  } 
+  }
 
   return (
     <article className="element">

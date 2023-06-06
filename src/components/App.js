@@ -19,6 +19,7 @@ function App() {
     setIsAddPlacePopupOpen();
     setIsEditAvatarPopupOpen();
     setIsImagePopupOpen();
+    setSelectedCard('');
   }
 
   return (
@@ -43,23 +44,14 @@ function App() {
           popupFormType={"profile-popup-form"}
           popupFormName={"formprofile"}
 
-          popupFirstInputClass={"popup__txt-input_type_name"}
-          popupFirstInputType={"text"}
-          popupFirstInputId={"profile-name-input"}
-          popupFirstInputName={"name"}
-          popupFirstInputPlaceholder={"Имя"}
-          popupFirstInputMinLength={"2"}
-          popupFirstInputMaxLength={"40"}
-          popupFirstInputError={"profile-name-input-error"}
-
-          popupSecondInputClass={"popup__txt-input_type_title"}
-          popupSecondInputType={"text"}
-          popupSecondInputId={"profile-title-input"}
-          popupSecondInputName={"about"}
-          popupSecondInputPlaceholder={"О себе"}
-          popupSecondInputMinLength={"2"}
-          popupSecondInputMaxLength={"200"}
-          popupSecondInputError={"profile-title-input-error"}
+          children={
+            <>
+              <input className="popup__txt-input popup__txt-input_type_name" type="text" id="profile-name-input" name="name" placeholder="Имя" required minlength="2" maxlength="40"/>
+              <span className="popup__error profile-name-input-error"></span>
+              <input className="popup__txt-input popup__txt-input_type_title" type="text" id="profile-title-input" name="about" placeholder="О себе" required minlength="2" maxlength="200"/>
+              <span className="popup__error profile-title-input-error"></span>
+            </>
+          }
           />
           <PopupWithForm // add place
           isOpen={isAddPlacePopupOpen}
@@ -70,21 +62,14 @@ function App() {
           popupFormType={"add-place-popup__form"}
           popupFormName={"formplace"}
 
-          popupFirstInputClass={"popup__txt-input_type_place"}
-          popupFirstInputType={"text"}
-          popupFirstInputId={"place-name-input"}
-          popupFirstInputName={"name"}
-          popupFirstInputPlaceholder={"Название"}
-          popupFirstInputMinLength={"2"}
-          popupFirstInputMaxLength={"30"}
-          popupFirstInputError={"place-name-input-error"}
-
-          popupSecondInputClass={"popup__txt-input_type_photo"}
-          popupSecondInputType={"url"}
-          popupSecondInputId={"place-url-input"}
-          popupSecondInputName={"link"}
-          popupSecondInputPlaceholder={"Ссылка на картинку"}
-          popupSecondInputError={"place-url-input-error"}
+          children={
+            <>
+              <input className="popup__txt-input popup__txt-input_type_place" type="text" id="place-name-input" name="name" placeholder="Название" required minlength="2" maxlength="30"/>
+              <span className="popup__error place-name-input-error"></span>
+              <input className="popup__txt-input popup__txt-input_type_photo" type="url" id="place-url-input" name="link" placeholder="Ссылка на картинку" required/>
+              <span className="popup__error place-url-input-error"></span>
+            </>
+          }
           />
           <PopupWithForm // avatar edit
           isOpen={isEditAvatarPopupOpen}
@@ -95,15 +80,12 @@ function App() {
           popupFormType={"update-avatar-popup__form"}
           popupFormName={"formplace"}
 
-          popupFirstInputClass={"popup__txt-input_type_avatar"}
-          popupFirstInputType={"url"}
-          popupFirstInputId={"avatar-url-input"}
-          popupFirstInputName={"avatar"}
-          popupFirstInputPlaceholder={"Ссылка на картинку"}
-          popupFirstInputError={"avatar-url-input-error"}
-
-          popupSecondInputClass={"hidden"}
-          popupSecondInputError={"hidden"}
+          children={
+            <>
+              <input class="popup__txt-input popup__txt-input_type_avatar" type="url" id="avatar-url-input" name="avatar" placeholder="Ссылка на картинку" required/>
+              <span class="popup__error avatar-url-input-error"></span>
+            </>
+          }
           />
           <PopupWithForm // delete confirm
           isOpen={isConfirmDeletePopupOpen}
@@ -114,16 +96,13 @@ function App() {
           popupFormType={"confirm-popup-form"}
           popupFormName={"formconfirm"}
 
-          popupFirstInputClass={"hidden"}
-          popupFirstInputError={"hidden"}
-
-          popupSecondInputClass={"hidden"}
-          popupSecondInputError={"hidden"}
+          children={<></>}
           />
           <ImagePopup
           isOpen={isImagePopupOpen}
           onClose={closeAllPopups}
-          card={selectedCard}
+          link={selectedCard.link}
+          name={selectedCard.name}
           />
         </div>
       </body>    

@@ -23,7 +23,8 @@ function Main(props) {
           res.map((el) => ({
             name: el.name,
             link: el.link,
-            likes: el.likes
+            likes: el.likes,
+            cardId: el._id
           }))
         )
       })
@@ -39,6 +40,7 @@ function Main(props) {
         onCardClick={props.handleCardClick}
         card={card}
         setSelectedCard={props.setSelectedCard}
+        key={card.cardId}
       />
       )
     });

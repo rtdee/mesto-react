@@ -12,14 +12,14 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isConfirmDeletePopupOpen, setIsConfirmDeletePopupOpen] = React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState('');
+  const [selectedCard, setSelectedCard] = React.useState({});
 
   function closeAllPopups(){
     setIsEditProfilePopupOpen();
     setIsAddPlacePopupOpen();
     setIsEditAvatarPopupOpen();
     setIsImagePopupOpen();
-    setSelectedCard('');
+    setSelectedCard({});
   }
 
   return (

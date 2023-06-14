@@ -28,34 +28,47 @@ function App() {
           avatar: res.avatar,
           myId: res._id
         });
-      });
+      })
+      .catch((res) => {
+        alert(`getUserInfo ERROR: ${res}`)
+      })
   }, [])
 
   function closeAllPopups(){
-    setIsEditProfilePopupOpen();
-    setIsAddPlacePopupOpen();
-    setIsEditAvatarPopupOpen();
-    setIsImagePopupOpen();
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setIsImagePopupOpen(false);
     setSelectedCard({});
   }
 
   function handleUpdateUser(data) {
-    api.patchUserInfo(data);
-    setCurrentUser({
-      ...currentUser,
-      name: data.name,
-      about: data.about,
-    });
-    closeAllPopups();
+    api.patchUserInfo(data)
+      .then(() => {
+        setCurrentUser({
+          ...currentUser,
+          name: data.name,
+          about: data.about,
+        });
+        closeAllPopups();
+      })
+      .catch((res) => {
+        alert(`patchUserInfo ERROR: ${res}`)
+      })
   }
 
   function handleUpdateAvatar(data) {
-    api.patchAvatar(data);
-    setCurrentUser({
-      ...currentUser,
-      avatar: data.avatar
-    });
-    closeAllPopups();
+    api.patchAvatar(data)
+      .then(() => {
+        setCurrentUser({
+          ...currentUser,
+          avatar: data.avatar
+        });
+        closeAllPopups();
+      })
+      .catch((res) => {
+        alert(`patchAvatar ERROR: ${res}`)
+      })
   }
 
   const [cards, setCards] = React.useState([]);
@@ -72,32 +85,51 @@ function App() {
           }))
         )
       })
-  })
+      .catch((res) => {
+        alert(`getInitialCards ERROR: ${res}`)
+      })
+  }, [])
 
     function handleCardLike(card) {
       const isLiked = card.likes.some(el => el._id === currentUser.myId);
-      !isLiked ?
+      if (!isLiked) {
       api.putLike(card.cardId)
         .then((newCard) => {
           setCards((cards) => cards.map((el) => el._id === card.cardId ? newCard : el));
         })
-      :
+        .catch((res) => {
+          alert(`putLike ERROR: ${res}`)
+        })
+      } else {
       api.deleteLike(card.cardId)
         .then((newCard) => {
           setCards((cards) => cards.map((el) => el._id === card.cardId ? newCard : el));
         })
+        .catch((res) => {
+          alert(`deleteLike ERROR: ${res}`)
+        })
+      }
     };
     
     function handleCardDelete(card) {
       api.deleteCard(card.cardId)
+        .then(() => {
+          setCards(cards.filter(newCard => newCard.cardId !== card.cardId));
+        })
+        .catch((res) => {
+          alert(`deleteCard ERROR: ${res}`)
+        })
     }
 
     function handleAddPlaceSubmit(data) {
       api.postNewCard(data)
         .then((newCard) => {
           setCards([newCard, ...cards]);
+          closeAllPopups();
         })
-      closeAllPopups();
+        .catch((res) => {
+          alert(`postNewCard ERROR: ${res}`)
+        })
     }
 
   return (
@@ -105,48 +137,42 @@ function App() {
       <body className="body">
         <div className="page">
           <Header/>
-          <Main
-          handleEditProfileClick={setIsEditProfilePopupOpen}
-          handleAddPlaceClick={setIsAddPlacePopupOpen}
-          handleEditAvatarClick={setIsEditAvatarPopupOpen}
-          handleCardClick={setIsImagePopupOpen}
-          setSelectedCard={setSelectedCard}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          <Main handleEditProfileClick={setIsEditProfilePopupOpen}
+                handleAddPlaceClick={setIsAddPlacePopupOpen}
+                handleEditAvatarClick={setIsEditAvatarPopupOpen}
+                handleCardClick={setIsImagePopupOpen}
+                setSelectedCard={setSelectedCard}
+                cards={cards}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
           />
           <Footer/>
-          <EditProfilePopup // edit profile
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
+          <EditProfilePopup isOpen={isEditProfilePopupOpen}
+                            onClose={closeAllPopups}
+                            onUpdateUser={handleUpdateUser}
           />
-          <AddPlacePopup // add place
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
+          <AddPlacePopup  isOpen={isAddPlacePopupOpen}
+                          onClose={closeAllPopups}
+                          onAddPlace={handleAddPlaceSubmit}
           />
-          <EditAvatarPopup // avatar edit
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
+          <EditAvatarPopup  isOpen={isEditAvatarPopupOpen}
+                            onClose={closeAllPopups}
+                            onUpdateAvatar={handleUpdateAvatar}
           />
-          <PopupWithForm // delete confirm
-          isOpen={isConfirmDeletePopupOpen}
-          onClose={closeAllPopups}
-          popupType={"confirm-popup"} 
-          popupTitle={"Вы уверены?"} 
-          popupButtonText={"Да"}
-          popupFormType={"confirm-popup-form"}
-          popupFormName={"formconfirm"}
+          <PopupWithForm  isOpen={isConfirmDeletePopupOpen}
+                          onClose={closeAllPopups}
+                          popupType={"confirm-popup"} 
+                          popupTitle={"Вы уверены?"} 
+                          popupButtonText={"Да"}
+                          popupFormType={"confirm-popup-form"}
+                          popupFormName={"formconfirm"}
 
-          children={<></>}
+                          children={<></>}
           />
-          <ImagePopup
-          isOpen={isImagePopupOpen}
-          onClose={closeAllPopups}
-          link={selectedCard.link}
-          name={selectedCard.name}
+          <ImagePopup isOpen={isImagePopupOpen}
+                      onClose={closeAllPopups}
+                      link={selectedCard.link}
+                      name={selectedCard.name}
           />
         </div>
       </body>    

@@ -5,7 +5,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 function Main(props) {
   const userInfo = React.useContext(CurrentUserContext);
 
-  const cardsSection = 
+  const cards = 
   props.cards.map((card) => {
     return (
       <Card
@@ -24,25 +24,23 @@ function Main(props) {
   });
 
   return (
-    <>
-      <main className="main">
-        <section className="profile">
-          <div className="profile__avatar-overlay" onClick={props.handleEditAvatarClick}></div>
-            <img className="profile__avatar" src={userInfo.avatar} alt="аватар" />
-          <div className="profile__info">
-            <div className="profile__container">
-              <h1 className="profile__name">{userInfo.name}</h1>
-              <button className="profile__edit-button" type="button" aria-label="Редактировать профиль" onClick={props.handleEditProfileClick}></button>
-            </div>
-            <p className="profile__title">{userInfo.about}</p>
+    <main className="main">
+      <section className="profile">
+        <div className="profile__avatar-overlay" onClick={props.handleEditAvatarClick}/>
+        <img className="profile__avatar" src={userInfo.avatar} alt="аватар" />
+        <div className="profile__info">
+          <div className="profile__container">
+            <h1 className="profile__name">{userInfo.name}</h1>
+            <button className="profile__edit-button" type="button" aria-label="Редактировать профиль" onClick={props.handleEditProfileClick}/>
           </div>
-          <button className="profile__add-button" type="button" aria-label="Добавить" onClick={props.handleAddPlaceClick}></button>
-        </section>
-        <section className="elements" aria-label="фотосекция">
-          {cardsSection}
-        </section>
-      </main>
-    </>
+          <p className="profile__title">{userInfo.about}</p>
+        </div>
+        <button className="profile__add-button" type="button" aria-label="Добавить" onClick={props.handleAddPlaceClick}/>
+      </section>
+      <section className="elements" aria-label="фотосекция">
+        {cards}
+      </section>
+    </main>
   );
 }
 

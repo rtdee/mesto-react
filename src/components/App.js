@@ -34,7 +34,7 @@ function App() {
       })
   }, [])
 
-  function closeAllPopups(){
+  function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
@@ -75,15 +75,7 @@ function App() {
   React.useEffect(() => {
     api.getInitialCards()
       .then((res) => {
-        setCards(
-          res.map((el) => ({
-            name: el.name,
-            link: el.link,
-            likes: el.likes,
-            cardId: el._id,
-            ownerId: el.owner._id
-          }))
-        )
+        setCards(res)
       })
       .catch((res) => {
         alert(`getInitialCards ERROR: ${res}`)
@@ -93,28 +85,30 @@ function App() {
     function handleCardLike(card) {
       const isLiked = card.likes.some(el => el._id === currentUser.myId);
       if (!isLiked) {
-      api.putLike(card.cardId)
-        .then((newCard) => {
-          setCards((cards) => cards.map((el) => el._id === card.cardId ? newCard : el));
-        })
-        .catch((res) => {
-          alert(`putLike ERROR: ${res}`)
-        })
+        api.putLike(card._id)
+          .then((newCard) => {
+            setCards((cards) => cards.map((el) => el._id === card._id ? newCard : el));
+          })
+          .catch((res) => {
+            alert(`putLike ERROR: ${res}`)
+          })
       } else {
-      api.deleteLike(card.cardId)
-        .then((newCard) => {
-          setCards((cards) => cards.map((el) => el._id === card.cardId ? newCard : el));
-        })
-        .catch((res) => {
-          alert(`deleteLike ERROR: ${res}`)
-        })
+        api.deleteLike(card._id)
+          .then((newCard) => {
+            setCards((cards) => cards.map((el) => el._id === card._id ? newCard : el));
+          })
+          .catch((res) => {
+            alert(`deleteLike ERROR: ${res}`)
+          })
       }
     };
     
     function handleCardDelete(card) {
-      api.deleteCard(card.cardId)
+      api.deleteCard(card._id)
         .then(() => {
-          setCards(cards.filter(newCard => newCard.cardId !== card.cardId));
+          setCards((cards) => cards.filter(function(newCard) {
+            return newCard._id !== card._id
+          }));
         })
         .catch((res) => {
           alert(`deleteCard ERROR: ${res}`)
@@ -134,7 +128,7 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <body className="body">
+      <div className="body">
         <div className="page">
           <Header/>
           <Main handleEditProfileClick={setIsEditProfilePopupOpen}
@@ -175,7 +169,7 @@ function App() {
                       name={selectedCard.name}
           />
         </div>
-      </body>    
+      </div>    
     </CurrentUserContext.Provider>  
   );
 }

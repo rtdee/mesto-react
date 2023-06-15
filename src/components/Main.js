@@ -5,18 +5,13 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 function Main(props) {
   const userInfo = React.useContext(CurrentUserContext);
 
-  const cards = 
-  props.cards.map((card) => {
+  const cards = props.cards.map((card) => {
     return (
       <Card
-        name={card.name}
-        link={card.link}
-        likes={card.likes.length}
         onCardClick={props.handleCardClick}
         card={card}
         setSelectedCard={props.setSelectedCard}
-        key={card.cardId}
-        ownerId={card.ownerId}
+        key={card._id}
         onCardLike={props.onCardLike}
         onCardDelete={props.onCardDelete}
       />
